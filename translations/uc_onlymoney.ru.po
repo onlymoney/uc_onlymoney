@@ -1,0 +1,195 @@
+# $Id$
+#
+# Russian translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  uc_onlymoney.pages.inc: n/a
+#  uc_onlymoney.settings.inc: n/a
+#  uc_onlymoney.module: n/a
+#  uc_onlymoney.info: n/a
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2014-02-04 17:28+0200\n"
+"PO-Revision-Date: 2014-02-04 17:28+0200\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((((n%10)==1)&&((n%100)!=11))?(0):(((((n%10)>=2)&&((n%10)<=4))&&(((n%100)<10)||((n%100)>=20)))?(1):2));\n"
+
+#: uc_onlymoney.pages.inc:24
+msgid "Cancel"
+msgstr "Отмена"
+
+#: uc_onlymoney.pages.inc:57
+msgid "wrong payment order"
+msgstr "Неправильный номер заказа"
+
+#: uc_onlymoney.pages.inc:77
+msgid "wrong payment order on merchant site"
+msgstr "Неправильный заказ или сайт мерчанта"
+
+#: uc_onlymoney.pages.inc:92
+msgid "wrong payment amount"
+msgstr "Неправильная сумма платежа"
+
+#: uc_onlymoney.pages.inc:103
+msgid "wrong payment currency"
+msgstr "Неправильная валюта платежа"
+
+#: uc_onlymoney.pages.inc:126
+msgid "wrong signature"
+msgstr "Неправильная сигнатура"
+
+#: uc_onlymoney.pages.inc:139
+msgid "wrong signature or order"
+msgstr "Неправильная сигнатура или заказ"
+
+#: uc_onlymoney.pages.inc:209
+msgid "Wrong amount or currency code"
+msgstr "Неправильная сумма либо валюта заказа"
+
+#: uc_onlymoney.pages.inc:212
+msgid "Thank you for purchasing. Our manager will contact you shortly"
+msgstr "Спасибо за оплату. Наш менеджер свяжется с Вами в ближайшее время"
+
+#: uc_onlymoney.pages.inc:220
+msgid "Wrong order data"
+msgstr "Неправильные данные заказа"
+
+#: uc_onlymoney.pages.inc:233
+msgid "Sorry, payment failed. Please, contact site administration"
+msgstr "Извините, оплата отклонена. Пожалуйста, свяжитесь с администратором сайта"
+
+#: uc_onlymoney.settings.inc:12
+msgid "Your merchant ID"
+msgstr "Ваш ID мерчанта"
+
+#: uc_onlymoney.settings.inc:13
+msgid "Your Onlymoney merchant ID."
+msgstr "Ваш ID мерчанта Onlymoney"
+
+#: uc_onlymoney.settings.inc:22
+msgid "Secret Key"
+msgstr "Секретный код"
+
+#: uc_onlymoney.settings.inc:24
+msgid "Your Onlymoney secret key."
+msgstr "Ваш секретный код Onlymoney"
+
+#: uc_onlymoney.settings.inc:31
+msgid "Onlymoney API URL"
+msgstr "Ссылка Onlyemoney API"
+
+#: uc_onlymoney.settings.inc:42
+msgid "Onlymoney Cancel Page URL"
+msgstr "Страница отмены платежа Onlymoney"
+
+#: uc_onlymoney.settings.inc:53
+msgid "Onlymoney Logging Mode"
+msgstr "Режим логгирования Onlymoney"
+
+#: uc_onlymoney.settings.inc:56
+msgid "If checked, module will write logs with watchdog while payment process"
+msgstr "Если отмечено, модуль будет писать логи с помощью Drupal watchdogs в процессе работы системы оплаты"
+
+#: uc_onlymoney.settings.inc:61
+msgid "Payment method title"
+msgstr "Заголовок метода оплаты"
+
+#: uc_onlymoney.module:25
+msgid "Access commerce urercart status pages"
+msgstr "Доступ к странице статуса платежа"
+
+#: uc_onlymoney.module:28
+msgid "Access commerce ubercart success pages"
+msgstr "Доступ к странице успешного платежа"
+
+#: uc_onlymoney.module:31
+msgid "Access commerce ubercart fail pages"
+msgstr "Доступ к странице неудачного платежа"
+
+#: uc_onlymoney.module:34
+msgid "Access commerce ubercart cancel pages"
+msgstr "Доступ к странице отмененного платежа"
+
+#: uc_onlymoney.module:116;117;124
+msgid "Onlymoney"
+msgstr "Onlymoney"
+
+#: uc_onlymoney.module:127
+msgid "Redirect to Onlymoney to pay."
+msgstr "Редирект на Onlymoney для оплаты"
+
+#: uc_onlymoney.module:149
+msgid "Paying order #!order_number on !site_name"
+msgstr "Оплата заказа #!order_number на сайте !site_name"
+
+#: uc_onlymoney.module:195
+msgid "Pay"
+msgstr "Оплатить"
+
+#: uc_onlymoney.module:210
+msgid "Onlymoney payment "
+msgstr "Оплата Onlymoney"
+
+#: uc_onlymoney.module:212
+msgid "You have to create an account at !url before start using this payment system. Follow the instructions below: "
+msgstr "Вы должны создать аккаунт на !url, прежде чем использовать эту систему оплаты. Выполните инструкции, перечисленные ниже: "
+
+#: uc_onlymoney.module:212
+msgid "After administrator approves merchant status you will get your Secret Key and Merchant ID: "
+msgstr "После того, как администратор подтвердит статус мерчанта, Вы получите Секретный Код и ID мерчанта "
+
+#: uc_onlymoney.module:231
+msgid "After logging in visit !url and fill those fields: "
+msgstr "После авторизации посетите !url и заполните эти поля: "
+
+#: uc_onlymoney.module:241
+msgid "For more details download and read this: !url "
+msgstr "Чтоб узнать подробности, скачайте и прочтите это: !url: "
+
+#: uc_onlymoney.module:218;219
+msgid "merchant instructions"
+msgstr "инструкция мерчанта"
+
+#: uc_onlymoney.module:222
+msgid "Onlymoney payment settings"
+msgstr "Настройки системы оплаты Onlymoney"
+
+#: uc_onlymoney.module:227
+msgid "Available currencies: "
+msgstr "Доступные валюты"
+
+#: uc_onlymoney.module:52
+msgid "Onlymoney payment status"
+msgstr "Статус платежа Onlymoney"
+
+#: uc_onlymoney.module:67
+msgid "Onlymoney payment success"
+msgstr "Платеж Onlymoney прошел успешно"
+
+#: uc_onlymoney.module:83
+msgid "Onlymoney payment failed"
+msgstr "Платеж Onlymoney завершился неудачно"
+
+#: uc_onlymoney.module:98
+msgid "Onlymoney payment cancel"
+msgstr "Платеж Onlymoney отменен"
+
+#: uc_onlymoney.info:0
+msgid "Onlymoney payment"
+msgstr "Оплата Onlymoney"
+
+#: uc_onlymoney.info:0
+msgid "Onlymoney.com payment system for Drupal Ubercart."
+msgstr "Система оплаты Onlymoney.com для Drupal Ubercart"
+
+#: uc_onlymoney.info:0
+msgid "Ubercart - payment"
+msgstr "Ubercart - оплата"
+

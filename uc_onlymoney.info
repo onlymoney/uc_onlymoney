@@ -1,0 +1,12 @@
+name = Onlymoney payment
+description = Onlymoney.com payment system for Drupal Ubercart.
+package = Ubercart - payment
+
+dependencies[] = uc_payment
+dependencies[] = uc_cart
+dependencies[] = uc_order
+
+core = 7.x
+version = 7.x-1.0
+
+configure=admin/store/settings/payment/method/onlymoney

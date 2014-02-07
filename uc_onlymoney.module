@@ -1,0 +1,248 @@
+<?php
+/**
+ * @file uc_onlymoney.module
+ */
+
+/**
+ * Include onlymoney payment method settings
+ */
+module_load_include('inc', 'uc_onlymoney', 'uc_onlymoney.settings');
+
+/**
+ * Implements hook_menu().
+ */
+function uc_onlymoney_menu() {
+  $items = array();
+
+  /**
+   * Backwards requests between merchant site and onlymoney.com
+   *
+   * @return json string
+   * @see uc_onlymoney_page_status
+   */
+  $items['onlymoney/status'] = array(
+    'title' => 'Onlymoney payment status',
+    'page callback' => 'uc_onlymoney_page_status',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_onlymoney.pages.inc',
+  );
+
+  /**
+   * Successful completion of the transaction
+   * Noticing user about successful payment
+   *
+   * @return drupal output
+   * @see uc_onlymoney_page_success
+   */
+  $items['onlymoney/success'] = array(
+    'title' => 'Onlymoney payment success',
+    'page callback' => 'uc_onlymoney_page_success',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_onlymoney.pages.inc',
+  );
+
+  /**
+   * Failed transaction (cancelling transaction, deleting order)
+   * Noticing user about failed payment
+   * Money return in case it was already paid
+   *
+   * @return drupal output
+   * @see uc_onlymoney_page_failed
+   */
+  $items['onlymoney/fail'] = array(
+    'title' => 'Onlymoney payment failed',
+    'page callback' => 'uc_onlymoney_page_failed',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_onlymoney.pages.inc',
+  );
+
+  /**
+   * User redirect back to merchant site
+   * Noticing user about redirecting back to merchant site
+   *
+   * @return drupal output
+   * @see uc_onlymoney_page_cancel
+   */
+  $items['onlymoney/cancel'] = array(
+    'title' => 'Onlymoney payment cancel',
+    'page callback' => 'uc_onlymoney_page_cancel',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'uc_onlymoney.pages.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_uc_payment_method().
+ *
+ * @see uc_payment_method_onlymoney()
+ */
+function uc_onlymoney_uc_payment_method() {
+  $title = '<br />'
+    . theme('image', array(
+      'path' => drupal_get_path('module', 'uc_onlymoney') . '/images/logo.png',
+      'alt' => t('Onlymoney'),
+      'title' => t('Onlymoney'),
+      'attributes' => array('class' => 'logo-onlymoney'),
+    ))
+    . '<br />'
+    . t('Easy and safe way to make payments.');
+
+  $methods['onlymoney'] = array(
+    'name' => t('Onlymoney'),
+    'title' => $title,
+    'review' => 'test review',
+    'desc' => t('Redirect to Onlymoney to pay.'),
+    'callback' => 'uc_payment_method_onlymoney',
+    'redirect' => 'uc_onlymoney_form',
+    'weight' => 3,
+    'checkout' => TRUE,
+    'no_gateway' => TRUE,
+  );
+
+  return $methods;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for uc_cart_checkout_review_form().
+ *
+ * @see uc_payment_form_uc_cart_checkout_review_form_alter
+ */
+function uc_onlymoney_form($form, &$form_state, $order) {
+  $amount = $order->order_total;
+  $currency_code = $order->currency;
+  $order_number = $order->order_id;
+
+  $description = t('Paying order #!order_number on !site_name', array(
+    '!order_number' => $order_number,
+    '!site_name' => variable_get('site_name')
+  ));
+
+
+  $data = array(
+    'merchant_id' => variable_get('uc_onlymoney_merchant_id'),
+    'order_id' => $order_number,
+    'amount' => $amount,
+    'currency' => $currency_code,
+  );
+
+  $secret_key = variable_get('uc_onlymoney_secretkey');
+
+  $json = json_encode($data);
+  $signature = base64_encode(urlencode(sha1($secret_key . $json
+                                            . $secret_key)));
+  $operation = base64_encode(urlencode($json));
+
+  /**
+   * Make user redirect with post data
+   */
+  $form = array();
+  $form['#action'] = variable_get('uc_onlymoney_api_url');
+
+  $form['act'] = array(
+    '#type' => 'hidden',
+    '#value' => 'custom',
+  );
+
+  $form['operation'] = array(
+    '#type' => 'hidden',
+    '#value' => $operation,
+  );
+
+  $form['signature'] = array(
+    '#type' => 'hidden',
+    '#value' => $signature,
+  );
+
+  $form['description'] = array(
+    '#type' => 'hidden',
+    '#value' => $description,
+  );
+
+  $form['actions']['submit'] = array(
+
+    '#type' => 'submit',
+    '#value' => t('Pay'),
+  );
+
+  return $form;
+}
+
+/**
+ * implements hook_help($path, $arg)
+ */
+function uc_onlymoney_help($path, $arg) {
+  $output = '';
+
+  switch ($path) {
+    case 'admin/help#uc_onlymoney':
+      $output = '<h3>' . t('Onlymoney payment') . '</h3>';
+      $output .= '<div>'
+        . t('You have to create an account at !url before start using this payment system. Follow the instructions below:',
+            array(
+              '!url' => l(t('https://onlymoney.com/'), 'https://onlymoney.com/')
+            ))
+        . '</div><br />';
+
+      $output .= '<div>'
+        . t('After logging in visit !url and fill those fields:',
+          array(
+            '!url' => l(t('https://onlymoney.com/merchant'), 'https://onlymoney.com/merchant')
+          ))
+        . '</div><br />';
+
+      $output .= theme('image', array(
+        'path' => drupal_get_path('module', 'uc_onlymoney')
+        . '/images/merchant_instruction_1.png',
+        'alt' => t('merchant instructions'),
+        'title' => t('merchant instructions')
+      ));
+
+      $output .= '<div>'
+        . t('After administrator approves merchant status you will get your Secret Key and Merchant ID.') . '</div><br />';
+
+      $output .= theme('image', array(
+        'path' => drupal_get_path('module', 'uc_onlymoney')
+        . '/images/merchant_instruction_2.png',
+        'alt' => t('merchant instructions'),
+        'title' => t('merchant instructions')
+      ));
+
+      $output .= '<div>'
+        . t('For more details download and read this: !url',
+            array(
+              '!url' => l(t('https://onlymoney.com/merchant/manual/'), 'https://onlymoney.com/merchant/manual/')
+            ))
+        . '</div><br />';
+
+      $output .= '<h3>' . t('Available currencies:') . '</h3>';
+
+      $merch_id = variable_get('uc_onlymoney_merchant_id');
+      $secret_key = variable_get('uc_onlymoney_secretkey');
+
+      /**
+       * Get currencies list
+       */
+      module_load_include('inc', 'uc_onlymoney', 'onlymoney_api/onlymoney_api');
+      $api = new omMerch($merch_id, $secret_key, 'https://onlymoney.com/merchs/');
+
+      $currencies = '';
+      foreach ($api->getCurrencies() as $k => $currency) {
+        $currencies .= $currency['name'] . ' (' . $k . ')<br />';
+      }
+      $output .= $currencies;
+
+      $output .= '<h4>' . t('Onlymoney payment settings') . '</h4>';
+      $output .= l(t('Settings'),
+                   'admin/store/settings/payment/method/onlymoney',
+                   array('html' => TRUE, 'absolute' => TRUE))
+        . '<br />';
+
+  }
+  return $output;
+}

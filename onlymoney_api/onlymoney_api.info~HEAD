@@ -1,0 +1,7 @@
+<?php
+name = OnlyMoney Merchant API
+machine name = onlymoney_api
+description = Provides an interface to the Onlymoney Merchant API (onlymoney.com)
+version = 1
+files[php][] = onlymoney_api.inc.php
+?>
